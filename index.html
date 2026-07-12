@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namma Indies — every street dog, known and named</title>
+<meta name="description" content="An open, community-built census of India's street dogs. A way to look, and not look away — so that no street dog lives or dies uncounted.">
+<style>
+  :root {
+    --ink: #2b2620;
+    --paper: #faf7f2;
+    --muted: #6f6659;
+    --rule: #e4ddd0;
+    --accent: #a5502e;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header {
+    margin-bottom: 3rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  section + section {
+    margin-top: 2rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    margin: 0 0 1.3rem;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  .cta {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .cta p {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta a {
+    display: inline-block;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    font-weight: 500;
+  }
+
+  .cta a:hover,
+  .cta a:focus {
+    opacity: 0.75;
+  }
+
+  footer {
+    margin-top: 4rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #ece6db;
+      --paper: #1c1913;
+      --muted: #a89d8a;
+      --rule: #3a3428;
+      --accent: #e0895a;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Namma Indies</h1>
+    <p class="tagline">every street dog, known and named</p>
+  </header>
+
+  <section>
+    <p>There are tens of millions of them — on every street, outside every shop, curled up in every parking lot in India. Indies. Most of them have never been counted. Many have never even been looked at, not really. Someone feeds them, though. Someone knows which one limps, which one just had puppies, which one waits by the tea stall every evening. That person already holds the whole story — we just don't have anywhere to put it yet.</p>
+    <p>Namma Indies is an open, community-built census of India's street dogs — a way to look, and not look away. Neighborhood by neighborhood, we want to help feeders and neighbors give every indie a name, a record, a place in something larger: so that no street dog lives or dies uncounted.</p>
+    <p>It's early. The map is mostly blank. That's where you come in.</p>
+  </section>
+
+  <section class="cta">
+    <p>Want to help build it, or map your street's indies?</p>
+    <a href="https://github.com/nammaindies">Get in touch</a>
+  </section>
+
+  <footer>
+    <p>nammaindies.org</p>
+  </footer>
+</main>
+</body>
+</html>

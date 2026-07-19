@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Technical Approach — Namma Indies</title>
+<meta name="description" content="How Namma Indies re-identifies individual street dogs from crowdsourced photos: an open-set re-ID problem with a strong geo/time prior and human confirmation.">
+<style>
+  :root {
+    --ink: #2b2620;
+    --paper: #faf7f2;
+    --muted: #6f6659;
+    --rule: #e4ddd0;
+    --accent: #a5502e;
+    --code-bg: #f0ebe1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .eyebrow a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow a:hover { color: var(--accent); }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .wip {
+    margin: 1.5rem 0 0;
+    padding: 0.6rem 0.9rem;
+    background: var(--code-bg);
+    border-left: 2px solid var(--accent);
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 3rem 0 1rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    margin: 0 0 1.3rem;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  a:hover, a:focus { opacity: 0.75; }
+
+  em { font-style: italic; }
+
+  ol, ul {
+    font-size: 1.08rem;
+    padding-left: 1.3rem;
+    margin: 0 0 1.3rem;
+  }
+
+  li { margin-bottom: 0.6rem; }
+
+  .lede { font-size: 1.2rem; }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin: 0 0 1.3rem;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  .comment { color: var(--muted); }
+
+  .refs {
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  .refs li { margin-bottom: 0.8rem; }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .pagenav a {
+    color: var(--muted);
+    border-bottom: none;
+    margin-right: 1.1rem;
+  }
+
+  .pagenav a:hover { color: var(--accent); opacity: 1; }
+
+  .pagenav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .wordmark { margin: 1rem 0 0; }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #ece6db;
+      --paper: #1c1913;
+      --muted: #a89d8a;
+      --rule: #3a3428;
+      --accent: #e0895a;
+      --code-bg: #26221a;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow"><a href="index.html">Namma Indies</a></p>
+    <h1>The Technical Approach</h1>
+    <p class="tagline">how a photo of a street dog becomes a life on record</p>
+    <p class="wip">Work in progress. This is the shape of the system as currently designed, not a finished spec — expect it to change as we run the first pilots.</p>
+  </header>
+
+  <section>
+    <p class="lede">In one sentence: Namma Indies is open-set individual re-identification of free-ranging dogs, from opportunistic, crowdsourced, uncontrolled imagery — using a strong geographic and temporal prior plus human confirmation to produce two outputs: a bias-corrected population estimate over time, and a persistent longitudinal record for each individual dog.</p>
+  </section>
+
+  <section>
+    <h2>Two consumers, one pipeline, two thresholds</h2>
+    <p>The same stream of photos feeds two very different products, and they tolerate error very differently.</p>
+    <ul>
+      <li><strong>The population layer</strong> asks <em>how many dogs are there?</em> It runs on loose, aggregate match signal — a mark-and-resight estimate with honest confidence intervals. Individual mistakes wash out on average.</li>
+      <li><strong>The individual layer</strong> asks <em>is this Kaju?</em> It needs a high-confidence match, ideally confirmed by a human — a feeder or a clinic — because a single wrong link corrupts a dog's whole history.</li>
+    </ul>
+    <p>Every sighting begins anonymous and points at an <em>individual slot that may stay empty for months</em>, until the model earns confidence or a feeder fills it in. That empty-slot-waiting-to-be-named is the emotional and architectural centre of the system: a sighting can <em>always</em> be linked to an individual later, even if it starts life as a nameless street photo.</p>
+  </section>
+
+  <section>
+    <h2>Why it's hard</h2>
+    <p>This is an <em>open-set</em> matching problem, not closed-set classification. The gallery of known dogs is unbounded, most individuals appear only once or twice, and for each new photo the system must decide not "which of these N dogs is this" but "is this <em>any</em> dog we've seen before, or a new one." Three difficulties compound:</p>
+    <ul>
+      <li><strong>Weak appearance signal.</strong> Indian landrace dogs have low visual variance <em>between</em> individuals and high variance <em>within</em> one — season, weight, wet coat, injury, pose, lighting. Appearance alone is only weakly discriminative.</li>
+      <li><strong>No labels to start from.</strong> Identities don't exist a priori, which is a cold-start problem: there's nothing to train an embedding on until the system has already been running.</li>
+      <li><strong>The base-rate trap.</strong> At city-scale gallery sizes, even a highly specific matcher accumulates false matches, simply because there are so many non-matches to test against.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The design response: re-ID as fusion</h2>
+    <p>The core move is to stop treating this as pure appearance matching. Dogs are territorial and home ranges are small — so a spatiotemporal prior collapses the candidate set from the whole city down to roughly ten nearby individuals <em>before</em> appearance is ever scored. This attacks the base-rate problem directly, and it means a weak appearance signal only has to separate ten dogs, not ten thousand.</p>
+    <p>In practice the whole retrieval is close to a single query — a geographic and temporal prefilter, then a vector ranking on a learned appearance embedding:</p>
+    <pre><code>SELECT s.individual_id, i.name,
+       s.embedding &lt;=&gt; :query AS visual_distance
+FROM sightings s
+JOIN individuals i ON i.id = s.individual_id
+WHERE ST_DWithin(s.geog, :location, 300)          <span class="comment">-- geo prior: ~300m</span>
+  AND s.captured_at &gt; now() - interval '30 days'   <span class="comment">-- time prior</span>
+  AND s.individual_id IS NOT NULL
+ORDER BY visual_distance
+LIMIT 10;</code></pre>
+    <p>The embeddings come from an animal re-identification foundation model (MegaDescriptor and/or DINOv2), with room to move to calibrated global-plus-local fusion later. The prior does double duty — it narrows the search, and, as the next section shows, it also manufactures training data for free.</p>
+  </section>
+
+  <section>
+    <h2>Routing, and the confirmation loop</h2>
+    <p>Once a new sighting is embedded, its match confidence routes it down one of three paths:</p>
+    <ul>
+      <li><strong>Very close visual match</strong> → auto-link to the existing individual (a high bar).</li>
+      <li><strong>Middling / uncertain</strong> → mark it <em>proposed</em> and route it to a feeder whose home area covers the sighting. Geography chooses the right expert automatically — the person most likely to actually know this dog.</li>
+      <li><strong>No candidate</strong> → open a new individual slot (or leave it unmatched; the population layer still counts it either way).</li>
+    </ul>
+    <p>The confirmation step is the quiet magic. When a feeder says "that's Kaju," that act is <em>recognition-as-love</em> and <em>recognition-as-label</em> at the same time — the same event in the data model. Every human confirmation is also a labelled training pair that improves the embedding on the next round. The people caring for the dogs are, without extra effort, teaching the model to see.</p>
+  </section>
+
+  <section>
+    <h2>Bootstrapping without labels</h2>
+    <p>To beat the cold-start problem before any feeder has confirmed anything, the same spatiotemporal structure that narrows search also mines pseudo-labels:</p>
+    <ul>
+      <li>Two sightings <strong>within ~50m and a few hours</strong> of each other are probably the <em>same</em> dog — a free hard-positive pair across changes in light, pose, and time of day.</li>
+      <li>Sightings far apart <em>and</em> visually dissimilar are probably <em>different</em> dogs — a negative pair.</li>
+    </ul>
+    <p>These are noisy but abundant, and they directly attack cold start: enough signal to fine-tune the embedding before humans are in the loop, with feeder confirmations then supervising on top.</p>
+  </section>
+
+  <section>
+    <h2>Honest population estimates</h2>
+    <p>Opportunistic crowdsourcing is biased sampling: it over-represents friendly, photogenic, high-footfall dogs and under-counts the shy ones on the quiet lane. So the population estimate can't be a raw sighting count. The real research task is to model <em>where we looked</em> — capture effort and coverage per area, estimate detection probability, then stratify and weight accordingly. The minimum viable signal is "sightings plus a defensible model of where we looked." And the estimate always carries its uncertainty: the system never returns a point population number without a confidence interval attached.</p>
+  </section>
+
+  <section>
+    <h2>Principles</h2>
+    <ul>
+      <li><strong>Open code, restricted data.</strong> The software is meant to be open source; the data is a separate decision. Nothing that resolves a vulnerable individual animal's whereabouts goes public.</li>
+      <li><strong>Aggregate-only public surface.</strong> The public map shows density, not dogs. Precise, recent, individual locations stay internal and access-controlled.</li>
+      <li><strong>Uncertainty is not optional.</strong> Population figures ship with confidence intervals, always.</li>
+      <li><strong>People-safe by default.</strong> Phone-backed identity is stored hashed, not raw; people's faces, plates, and house numbers are avoided where feasible.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Planned architecture</h2>
+    <p>For the pilot, deliberately boring plumbing — so that effort concentrates on the one genuinely hard part, re-identification. A single small server, a single Postgres database doing triple duty (relational, spatial via PostGIS, and vector search via pgvector), and Python end-to-end. The flow:</p>
+    <ol>
+      <li><strong>Intake</strong> — a photo arrives over WhatsApp with location and timestamp; the image goes to object storage, a <code>sighting</code> row is created, and an embedding job is queued.</li>
+      <li><strong>Embed</strong> — a background worker computes the appearance embedding (async, CPU is fine at pilot volume — no GPU on day one).</li>
+      <li><strong>Retrieve</strong> — the geo-and-time prefilter plus vector ranking finds candidate individuals.</li>
+      <li><strong>Route</strong> — the threshold decision auto-links, proposes to a feeder, or opens a new slot.</li>
+      <li><strong>Confirm</strong> — a feeder's verdict links the sighting and becomes a training label.</li>
+      <li><strong>Estimate</strong> — a separate job consumes the resight signal to produce population estimates with intervals; a public map renders aggregate density only.</li>
+    </ol>
+    <p>Everything resists premature scale — no microservices, no GPU, no separate search cluster — until the first experiment tells us how much of the work appearance can actually carry, and how much load the geographic prior must bear.</p>
+  </section>
+
+  <section>
+    <h2>References</h2>
+    <ul class="refs">
+      <li>Belsare, A. &amp; Vanak, A. T. (2020). Modelling the challenges of managing free-ranging dog populations. <a href="https://www.nature.com/articles/s41598-020-75828-6"><em>Scientific Reports</em>, 10, 18874</a>. The denominator and rebound problem.</li>
+      <li>Gibson et al. (2022), <em>Nature Communications</em> — the Goa rabies-elimination and coordination model.</li>
+      <li>WildlifeDatasets / MegaDescriptor (WACV 2024) — an animal re-identification foundation model.</li>
+      <li>WildFusion (2024) — calibrated fusion of deep similarity and local matching for zero-shot re-ID.</li>
+      <li><a href="https://www.inaturalist.org/">iNaturalist</a> — the community-identification pattern this borrows from.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <nav class="pagenav">
+      <a href="index.html">Home</a>
+      <a href="problem.html">The Problem</a>
+      <a href="technical.html" aria-current="page">Technical</a>
+    </nav>
+    <p class="wordmark">nammaindies.org</p>
+  </footer>
+</main>
+</body>
+</html>

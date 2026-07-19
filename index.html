@@ -90,9 +90,32 @@
 
   footer {
     margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
     color: var(--muted);
     font-size: 0.9rem;
   }
+
+  .pagenav a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: none;
+    margin-right: 1.1rem;
+    font-weight: 400;
+  }
+
+  .pagenav a:hover,
+  .pagenav a:focus {
+    color: var(--accent);
+    opacity: 1;
+  }
+
+  .pagenav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .wordmark { margin: 1rem 0 0; }
 
   @media (prefers-color-scheme: dark) {
     :root {
@@ -124,7 +147,12 @@
   </section>
 
   <footer>
-    <p>nammaindies.org</p>
+    <nav class="pagenav">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="problem.html">The Problem</a>
+      <a href="technical.html">Technical</a>
+    </nav>
+    <p class="wordmark">nammaindies.org</p>
   </footer>
 </main>
 </body>

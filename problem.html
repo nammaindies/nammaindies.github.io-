@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Problem — Namma Indies</title>
+<meta name="description" content="Why street-dog welfare in India keeps failing — and what a single missing number would change.">
+<style>
+  :root {
+    --ink: #2b2620;
+    --paper: #faf7f2;
+    --muted: #6f6659;
+    --rule: #e4ddd0;
+    --accent: #a5502e;
+    --code-bg: #f0ebe1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .eyebrow a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow a:hover { color: var(--accent); }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 3rem 0 1rem;
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 2rem 0 0.5rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    margin: 0 0 1.3rem;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  a:hover, a:focus { opacity: 0.75; }
+
+  em { font-style: italic; }
+
+  .lede {
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .close {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+    font-size: 1.15rem;
+  }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .pagenav a {
+    color: var(--muted);
+    border-bottom: none;
+    margin-right: 1.1rem;
+  }
+
+  .pagenav a:hover { color: var(--accent); opacity: 1; }
+
+  .pagenav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .wordmark { margin: 1rem 0 0; }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #ece6db;
+      --paper: #1c1913;
+      --muted: #a89d8a;
+      --rule: #3a3428;
+      --accent: #e0895a;
+      --code-bg: #26221a;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow"><a href="index.html">Namma Indies</a></p>
+    <h1>The Problem</h1>
+    <p class="tagline">we can't help what we can't count</p>
+  </header>
+
+  <section>
+    <p class="lede">Ask the simplest possible question about the street dogs on your road — how many are there? — and nobody can answer it. Not the municipality. Not the vet. Not the NGO that ran a vaccination drive down your lane last spring.</p>
+
+    <p>This sounds like a trivia gap. It is actually the thing quietly breaking almost every attempt to help India's street dogs. Every serious intervention — sterilisation, rabies vaccination, shelter planning, conflict management — is at heart a <em>ratio</em>: how much of the population did we reach? And a ratio needs a denominator. We can always count the numerator: we vaccinated N dogs, we sterilised N dogs, we picked up N dogs. But the denominator — how many dogs there actually are — has never existed. So programs run without ever knowing what fraction of the problem they've touched. They fly blind on the one number that decides whether the whole effort worked.</p>
+
+    <p>This isn't a hunch. Belsare and Vanak lay it out in their 2020 paper in <a href="https://www.nature.com/articles/s41598-020-75828-6"><em>Scientific Reports</em></a>: without a reliable population estimate and an understanding of turnover, catch-and-release sterilisation programs can look busy for years and still fail to bend the curve, because dogs are removed from the count faster than the program can keep up. And the usual fix — a top-down, state-run census — collides with the reality of limited administrative capacity across most of India. Nobody has the people or the reach to count tens of millions of free-ranging animals, repeatedly, forever.</p>
+
+    <p>So the count has to come from somewhere else. It has to come from the people already standing next to the dogs.</p>
+  </section>
+
+  <section>
+    <h2>What becomes possible once a city can see its dogs</h2>
+
+    <p>Here is the part worth sitting with. Once you have a continuously-updated, individually-resolved map of a street-dog population — who the dogs are, where they are, how the population is moving — a whole stack of previously-intractable problems become tractable at once. Not because you built a tool for each, but because almost all of them were bottlenecked on the <em>same missing thing</em>. Here is the fan-out, roughly from the problems it solves cleanly to the ones it only nudges.</p>
+
+    <h3>Rabies — the sharpest fit</h3>
+    <p>This is the one where the theory of change is almost mechanical. Herd immunity against rabies kicks in around 70% vaccination coverage — and coverage is a ratio, vaccinated over total. Every program can count the numerator; nobody knows the denominator, so nobody actually knows their coverage, so they're guessing on the number that determines whether the campaign works at all. A community census is a denominator machine — and better, a <em>continuous</em> one, so it catches the thing that silently kills these programs: the slow refill of unvaccinated dogs through birth and migration that drops a neighbourhood back below threshold while the paperwork still says "done." You go from "we ran a drive" to "this ward is at 62% and slipping — go here."</p>
+
+    <h3>ABC / sterilisation — the same denominator, a deeper payoff</h3>
+    <p>Same coverage logic, but individual identity unlocks something Animal Birth Control has never had: per-dog outcome tracking. Today ABC is measured by throughput — surgeries performed — which is an activity metric, not an outcome metric. With persistent identity you can ask the real questions. Did this sterilised female hold her territory, or get displaced by an intact migrant? What is the actual recapture rate, the actual turnover, the actual time-to-rebound in <em>this</em> neighbourhood? Those are the exact parameters Belsare and Vanak had to <em>assume</em> in their model — here you'd be measuring them in the wild. Which means you could tell a municipality not just "sterilise more," but "sterilise here, at this intensity, or you'll rebound in three years." ABC stops being faith-based.</p>
+
+    <h3>Welfare — the quiet, huge one</h3>
+    <p>This is where individual identity stops being a coverage tool and becomes a care tool. A named dog with a history is a dog whose deterioration is <em>visible</em>: the limp that's new this week, the mange spreading, the lactating female who means there's an unseen litter nearby, the dog that hasn't been sighted in a month. Feeders already hold this in their heads for their ten dogs. The system lets it aggregate, persist, and — critically — <em>survive the feeder</em>. When a feeder moves away or dies, their dogs currently fall off a cliff of care, because the knowledge lived nowhere but their memory. This is institutional memory for street-dog welfare. And it makes triage rational: instead of rescues drowning in a random firehose of "dog in distress" WhatsApp forwards, you get a prioritised, located, historied queue.</p>
+
+    <h3>Human–dog conflict — the politically load-bearing one</h3>
+    <p>This is the problem that actually drives the policy — the panic, the cullings, the court orders. Bites and conflict are hyper-local: a specific pack, a specific corner, often a specific unsterilised male or a resource-guarding dynamic. Today the municipal response to a bite complaint is a blunt instrument — round up dogs from the area, or worse. With individual-level data you can pinpoint: it's these three dogs at this bus stop, here's their status, here's the targeted intervention. It replaces mass removal with surgical response — more humane <em>and</em> more effective — and it hands welfare advocates the thing they never have in these fights: data instead of sentiment. That's the difference between losing the room and winning it.</p>
+
+    <h3>Adoption — genuinely lovely, and underrated</h3>
+    <p>The pipeline already exists: every indie in the system is photographed, located, historied, and temperament-noted by the feeder who knows them. That is most of an adoption listing, generated as a byproduct. But the deeper thing is <em>narrative</em>. A dog with a name, a face people already recognise from the neighbourhood, a documented history, an arc — that is radically more adoptable than "stray dog, shelter #4471." You'd be manufacturing the exact raw material that adoption movements run on: individual stories, at scale.</p>
+
+    <h3>Science — a research instrument for a whole population</h3>
+    <p>Set welfare aside for a moment and just look at what the dataset <em>is</em>: a longitudinal, geolocated, individually-resolved record of a free-ranging carnivore population at national scale, with health outcomes attached. That has essentially never existed for any large mammal anywhere — let alone one living inside human cities. Real questions become answerable: actual home-range sizes and territoriality, survival curves, reproductive rates, how disease moves through a spatial network, how dog density tracks garbage and urban form. This is where the thing stops being an app and becomes scientific infrastructure.</p>
+
+    <h3>The feeder-to-institution bridge</h3>
+    <p>There is a whole invisible labour force — mostly women, often unrecognised, sometimes actively harassed — doing the daily work of keeping these dogs alive. Right now they're atomised and powerless. A tool that aggregates their knowledge quietly <em>credentials</em> them: it turns "the crazy dog lady" into "the person holding verified ground-truth data on forty animals the municipality needs." That's a status and legitimacy shift for a marginalised group, almost as a side effect.</p>
+
+    <h3>Knowing when <em>not</em> to intervene</h3>
+    <p>Subtle, but real: good data prevents dumb kindness. It can show that a "stray" is actually a well-fed community dog with six feeders; that relocating a dog will just open a territory for an intact migrant (the vacuum effect); that a "pack" is a stable, sterilised group that should be left alone. A lot of harm in this space comes from well-meaning intervention with no visibility. The map also tells you where the leverage <em>isn't</em>.</p>
+  </section>
+
+  <section class="close">
+    <p>The through-line worth holding onto: <em>none of these are really separate problems.</em> Rabies, sterilisation, welfare, conflict, adoption, science — they are all downstream of one epistemic gap, which is that we have never been able to <em>see</em> this population as a set of individuals over time. We're not building six tools. We're building the missing sense organ — and these are just some of the things that become possible once a city can finally see its dogs.</p>
+
+    <p>Which is another way of saying the whole point: <em>to look, and not look away</em>.</p>
+
+    <p><a href="technical.html">How it works, technically →</a></p>
+  </section>
+
+  <footer>
+    <nav class="pagenav">
+      <a href="index.html">Home</a>
+      <a href="problem.html" aria-current="page">The Problem</a>
+      <a href="technical.html">Technical</a>
+    </nav>
+    <p class="wordmark">nammaindies.org</p>
+  </footer>
+</main>
+</body>
+</html>

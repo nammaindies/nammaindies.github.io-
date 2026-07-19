@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Technical Approach — Namma Indies</title>
 <meta name="description" content="How Namma Indies re-identifies individual street dogs from crowdsourced photos: an open-set re-ID problem with a strong geo/time prior and human confirmation.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Namma Indies">
+<meta property="og:title" content="The Technical Approach — Namma Indies">
+<meta property="og:description" content="How Namma Indies re-identifies individual street dogs from crowdsourced photos: an open-set re-ID problem with a strong geo/time prior and human confirmation.">
+<meta property="og:url" content="https://nammaindies.org/technical.html">
+<meta property="og:image" content="https://nammaindies.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Technical Approach — Namma Indies">
+<meta name="twitter:description" content="How Namma Indies re-identifies individual street dogs from crowdsourced photos: an open-set re-ID problem with a strong geo/time prior and human confirmation.">
+<meta name="twitter:image" content="https://nammaindies.org/og-image.png">
 <style>
   :root {
     --ink: #2b2620;
@@ -169,6 +183,74 @@
 
   .wordmark { margin: 1rem 0 0; }
 
+  .brand { margin-bottom: 1.1rem; }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: none;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .logo:hover, .logo:focus { opacity: 1; }
+
+  .logo-mark {
+    width: 1.5em;
+    height: 1.5em;
+    overflow: visible;
+    flex: none;
+  }
+
+  .logo-mark path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .logo:hover .logo-mark,
+  .logo:focus .logo-mark {
+    animation: wag 0.9s ease-in-out;
+    transform-origin: 60% 75%;
+  }
+
+  @keyframes wag {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-9deg); }
+    60% { transform: rotate(7deg); }
+  }
+
+  .dinkus {
+    text-align: center;
+    margin: 3rem 0;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .dinkus svg {
+    width: 1.9rem;
+    height: 1.9rem;
+    overflow: visible;
+  }
+
+  .dinkus path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo:hover .logo-mark,
+    .logo:focus .logo-mark { animation: none; }
+  }
+
   @media (prefers-color-scheme: dark) {
     :root {
       --ink: #ece6db;
@@ -184,7 +266,7 @@
 <body>
 <main>
   <header>
-    <p class="eyebrow"><a href="index.html">Namma Indies</a></p>
+    <p class="brand"><a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 25 C9 16 13 12 19 12 C24 12 27 15 27 19.5 C27 23.5 23.5 25.5 20.5 24 C18.3 22.9 18 20 20 18.7"/></svg><span>Namma Indies</span></a></p>
     <h1>The Technical Approach</h1>
     <p class="tagline">how a photo of a street dog becomes a life on record</p>
     <p class="wip">Work in progress. This is the shape of the system as currently designed, not a finished spec — expect it to change as we run the first pilots.</p>
@@ -224,6 +306,7 @@ FROM sightings s
 JOIN individuals i ON i.id = s.individual_id
 WHERE ST_DWithin(s.geog, :location, 300)          <span class="comment">-- geo prior: ~300m</span>
   AND s.captured_at &gt; now() - interval '30 days'   <span class="comment">-- time prior</span>
+  AND s.species = :species                          <span class="comment">-- dogs match dogs, cats match cats</span>
   AND s.individual_id IS NOT NULL
 ORDER BY visual_distance
 LIMIT 10;</code></pre>
@@ -253,7 +336,7 @@ LIMIT 10;</code></pre>
 
   <section>
     <h2>Honest population estimates</h2>
-    <p>Opportunistic crowdsourcing is biased sampling: it over-represents friendly, photogenic, high-footfall dogs and under-counts the shy ones on the quiet lane. So the population estimate can't be a raw sighting count. The real research task is to model <em>where we looked</em> — capture effort and coverage per area, estimate detection probability, then stratify and weight accordingly. The minimum viable signal is "sightings plus a defensible model of where we looked." And the estimate always carries its uncertainty: the system never returns a point population number without a confidence interval attached.</p>
+    <p>Opportunistic crowdsourcing is biased sampling: it over-represents friendly, photogenic, high-footfall dogs and under-counts the shy ones on the quiet lane. So the population estimate can't be a raw sighting count. The real research task is to model <em>where we looked</em> — capture effort and coverage per area, estimate detection probability, then stratify and weight accordingly. The minimum viable signal is "sightings plus a defensible model of where we looked," run per species so dogs and cats are counted separately. And the estimate always carries its uncertainty: the system never returns a point population number without a confidence interval attached.</p>
   </section>
 
   <section>
@@ -270,7 +353,7 @@ LIMIT 10;</code></pre>
     <h2>Planned architecture</h2>
     <p>For the pilot, deliberately boring plumbing — so that effort concentrates on the one genuinely hard part, re-identification. A single small server, a single Postgres database doing triple duty (relational, spatial via PostGIS, and vector search via pgvector), and Python end-to-end. The flow:</p>
     <ol>
-      <li><strong>Intake</strong> — a photo arrives over WhatsApp with location and timestamp; the image goes to object storage, a <code>sighting</code> row is created, and an embedding job is queued.</li>
+      <li><strong>Intake</strong> — a photo arrives over WhatsApp with location and timestamp; the image goes to object storage, a <code>sighting</code> row is created — tagged with species (dog, cat, or the occasional other) from the first photo — and an embedding job is queued.</li>
       <li><strong>Embed</strong> — a background worker computes the appearance embedding (async, CPU is fine at pilot volume — no GPU on day one).</li>
       <li><strong>Retrieve</strong> — the geo-and-time prefilter plus vector ranking finds candidate individuals.</li>
       <li><strong>Route</strong> — the threshold decision auto-links, proposes to a feeder, or opens a new slot.</li>
@@ -279,6 +362,8 @@ LIMIT 10;</code></pre>
     </ol>
     <p>Everything resists premature scale — no microservices, no GPU, no separate search cluster — until the first experiment tells us how much of the work appearance can actually carry, and how much load the geographic prior must bear.</p>
   </section>
+
+  <div class="dinkus" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 25 C9 16 13 12 19 12 C24 12 27 15 27 19.5 C27 23.5 23.5 25.5 20.5 24 C18.3 22.9 18 20 20 18.7"/></svg></div>
 
   <section>
     <h2>References</h2>

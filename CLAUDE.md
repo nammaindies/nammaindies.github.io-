@@ -9,6 +9,12 @@ they already hold the whole story (which dog limps, which one just had
 puppies, which one waits by the tea stall), there's just nowhere to put it.
 Think iNaturalist-meets-Pokémon-Go for street dogs.
 
+Dogs are the focus, but not the whole story: **species** is a first-class
+field in the system, so India's street cats ride along — tracked in the
+same pipeline, counted per species. On the public pages cats stay a quiet
+easter egg (a few light mentions, e.g. the curled-tail mark reads as dog
+*or* cat), never a headline.
+
 The heart of it: **to look, and not look away**.
 The mission: **so that no street dog lives or dies uncounted**.
 

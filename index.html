@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namma Indies — every street dog, known and named</title>
 <meta name="description" content="An open, community-built census of India's street dogs. A way to look, and not look away — so that no street dog lives or dies uncounted.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Namma Indies">
+<meta property="og:title" content="Namma Indies — every street dog, known and named">
+<meta property="og:description" content="An open, community-built census of India's street dogs. A way to look, and not look away — so that no street dog lives or dies uncounted.">
+<meta property="og:url" content="https://nammaindies.org/">
+<meta property="og:image" content="https://nammaindies.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Namma Indies — every street dog, known and named">
+<meta name="twitter:description" content="An open, community-built census of India's street dogs. A way to look, and not look away — so that no street dog lives or dies uncounted.">
+<meta name="twitter:image" content="https://nammaindies.org/og-image.png">
 <style>
   :root {
     --ink: #2b2620;
@@ -117,6 +131,42 @@
 
   .wordmark { margin: 1rem 0 0; }
 
+  .hero-mark {
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+
+  .hero-mark svg {
+    width: 3rem;
+    height: 3rem;
+    overflow: visible;
+    display: block;
+  }
+
+  .hero-mark path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    animation: draw 1.5s 0.25s ease-out forwards;
+  }
+
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .egg {
+    margin-top: 2.25rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-mark path { animation: none; stroke-dashoffset: 0; }
+  }
+
   @media (prefers-color-scheme: dark) {
     :root {
       --ink: #ece6db;
@@ -131,6 +181,9 @@
 <body>
 <main>
   <header>
+    <div class="hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M9 25 C9 16 13 12 19 12 C24 12 27 15 27 19.5 C27 23.5 23.5 25.5 20.5 24 C18.3 22.9 18 20 20 18.7"/></svg>
+    </div>
     <h1>Namma Indies</h1>
     <p class="tagline">every street dog, known and named</p>
   </header>
@@ -144,6 +197,7 @@
   <section class="cta">
     <p>Want to help build it, or map your street's indies?</p>
     <a href="https://github.com/nammaindies">Get in touch</a>
+    <p class="egg">Mostly dogs, for now. Though we're counting the cats too.</p>
   </section>
 
   <footer>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join Us — Namma Indies</title>
+<meta name="description" content="Who's building Namma Indies, and how to help — an open, community-built census of India's street dogs.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Namma Indies">
+<meta property="og:title" content="Join Us — Namma Indies">
+<meta property="og:description" content="Who's building Namma Indies, and how to help — an open, community-built census of India's street dogs.">
+<meta property="og:url" content="https://nammaindies.org/join.html">
+<meta property="og:image" content="https://nammaindies.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Join Us — Namma Indies">
+<meta name="twitter:description" content="Who's building Namma Indies, and how to help — an open, community-built census of India's street dogs.">
+<meta name="twitter:image" content="https://nammaindies.org/og-image.png">
+<style>
+  :root {
+    --ink: #2b2620;
+    --paper: #faf7f2;
+    --muted: #6f6659;
+    --rule: #e4ddd0;
+    --accent: #a5502e;
+    --code-bg: #f0ebe1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 3rem 0 1rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    margin: 0 0 1.3rem;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  a:hover, a:focus { opacity: 0.75; }
+
+  em { font-style: italic; }
+
+  .lede {
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .roster {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.3rem;
+  }
+
+  .roster li {
+    font-size: 1.08rem;
+    margin-bottom: 1rem;
+  }
+
+  .roster li:last-child { margin-bottom: 0; }
+
+  .who { font-weight: 600; color: var(--ink); }
+  a.who { color: var(--accent); }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .pagenav a {
+    color: var(--muted);
+    border-bottom: none;
+    margin-right: 1.1rem;
+  }
+
+  .pagenav a:hover { color: var(--accent); opacity: 1; }
+
+  .pagenav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .wordmark { margin: 1rem 0 0; }
+  .wordmark a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .wordmark a:hover { color: var(--accent); border-color: currentColor; }
+
+  .brand { margin-bottom: 1.1rem; }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: none;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .logo:hover, .logo:focus { opacity: 1; }
+
+  .logo-mark {
+    width: 1.5em;
+    height: 1.5em;
+    overflow: visible;
+    flex: none;
+  }
+
+  .logo-mark path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .logo:hover .logo-mark,
+  .logo:focus .logo-mark {
+    animation: wag 0.9s ease-in-out;
+    transform-origin: 60% 75%;
+  }
+
+  @keyframes wag {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-9deg); }
+    60% { transform: rotate(7deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo:hover .logo-mark,
+    .logo:focus .logo-mark { animation: none; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #ece6db;
+      --paper: #1c1913;
+      --muted: #a89d8a;
+      --rule: #3a3428;
+      --accent: #e0895a;
+      --code-bg: #26221a;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="brand"><a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 25 C9 16 13 12 19 12 C24 12 27 15 27 19.5 C27 23.5 23.5 25.5 20.5 24 C18.3 22.9 18 20 20 18.7"/></svg><span>Namma Indies</span></a></p>
+    <h1>Join Us</h1>
+    <p class="tagline">come help us see them</p>
+  </header>
+
+  <section>
+    <p class="lede">A census of millions of dogs isn't something a small team can build. It only works if it's built by the people who already know the dogs — on their street, outside their shop, on the walk to work. That's the whole idea, and that's where you come in.</p>
+
+    <p>Namma Indies is being built in the open, by a few people and a couple of organisations who care about getting this right. It's early, and there's room for a lot more hands.</p>
+  </section>
+
+  <section>
+    <h2>Who's building it</h2>
+    <ul class="roster">
+      <li><a class="who" href="https://x.com/akadogluk">Akash Kulgod</a> — co-founder and CEO of Dognosis.</li>
+      <li><span class="who">Aswin R</span> — computer vision at Dognosis.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Partners</h2>
+    <ul class="roster">
+      <li><a class="who" href="https://dognosis.tech">Dognosis</a> — unleashing canine superpowers.</li>
+      <li><a class="who" href="https://soulmates.vet">Soulmates</a> — affordable, human-level healthcare for animals.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How to help</h2>
+    <p>If you know the dogs on your street — which one's new, which one's limping, which one just had pups — you already hold most of what this needs. Mapping them, naming them, keeping their story: that's the work.</p>
+
+    <p>If you build, the code is open, and the hard problems are wide open too — open-set re-identification, the spatial prior, honest population estimates. See <a href="technical.html">how it works</a>, then come find us.</p>
+
+    <p>Either way, come say hello: <a href="https://github.com/nammaindies">GitHub</a>, <a href="https://instagram.com/nammaindies">Instagram</a>, or <a href="https://x.com/nammaindies">X</a>.</p>
+  </section>
+
+  <footer>
+    <nav class="pagenav">
+      <a href="index.html">Home</a>
+      <a href="problem.html">Why</a>
+      <a href="technical.html">How</a>
+      <a href="join.html" aria-current="page">Join Us</a>
+    </nav>
+    <p class="wordmark"><a href="https://instagram.com/nammaindies">Instagram</a> · <a href="https://x.com/nammaindies">X</a> · nammaindies.org</p>
+  </footer>
+</main>
+</body>
+</html>

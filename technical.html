@@ -283,9 +283,9 @@
     <p>The same stream of photos feeds two different products, and they tolerate error very differently.</p>
     <ul>
       <li><strong>The population layer</strong> asks <em>how many dogs are there?</em> It runs on loose, aggregate match signal — a mark-and-resight estimate with honest confidence intervals. Individual mistakes wash out on average.</li>
-      <li><strong>The individual layer</strong> asks <em>is this Kaju?</em> It needs a high-confidence match, ideally confirmed by a human — a feeder or a clinic — because a single wrong link corrupts a dog's whole history.</li>
+      <li><strong>The individual layer</strong> asks <em>is this Kaju?</em> It needs a high-confidence match, ideally confirmed by a human — a neighbour or a clinic — because a single wrong link corrupts a dog's whole history.</li>
     </ul>
-    <p>Every sighting begins anonymous and points at an <em>individual slot that may stay empty for months</em>, until the model earns confidence or a feeder fills it in. That empty-slot-waiting-to-be-named is the emotional and architectural centre of the system: a sighting can <em>always</em> be linked to an individual later, even if it starts life as a nameless street photo.</p>
+    <p>Every sighting begins anonymous and points at an <em>individual slot that may stay empty for months</em>, until the model earns confidence or someone who knows the dog fills it in. That empty-slot-waiting-to-be-named is the emotional and architectural centre of the system: a sighting can <em>always</em> be linked to an individual later, even if it starts life as a nameless street photo.</p>
   </section>
 
   <section>
@@ -320,20 +320,20 @@ LIMIT 10;</code></pre>
     <p>Once a new sighting is embedded, its match confidence routes it down one of three paths:</p>
     <ul>
       <li><strong>Very close visual match</strong> → auto-link to the existing individual (a high bar).</li>
-      <li><strong>Middling / uncertain</strong> → mark it <em>proposed</em> and route it to a feeder whose home area covers the sighting. Geography chooses the right expert automatically — the person most likely to actually know this dog.</li>
+      <li><strong>Middling / uncertain</strong> → mark it <em>proposed</em> and route it to a neighbour whose home patch covers the sighting. Geography picks the right person automatically — whoever is most likely to actually know this dog.</li>
       <li><strong>No candidate</strong> → open a new individual slot (or leave it unmatched; the population layer still counts it either way).</li>
     </ul>
-    <p>When a feeder says "that's Kaju," that's <em>recognition-as-love</em> and <em>recognition-as-label</em> at once — the same event in the data model. Every confirmation is also a labelled training pair that sharpens the embedding on the next round. The people who care for the dogs end up teaching the model to see, without doing anything they weren't already doing.</p>
+    <p>When a neighbour says "that's Kaju," that's <em>recognition-as-love</em> and <em>recognition-as-label</em> at once — the same event in the data model. Every confirmation is also a labelled training pair that sharpens the embedding on the next round. The people who know the dogs end up teaching the model to see, without doing anything they weren't already doing.</p>
   </section>
 
   <section>
     <h2>Bootstrapping without labels</h2>
-    <p>To beat the cold-start problem before any feeder has confirmed anything, the same spatiotemporal structure that narrows search also mines pseudo-labels:</p>
+    <p>To beat the cold-start problem before anyone has confirmed anything, the same spatiotemporal structure that narrows search also mines pseudo-labels:</p>
     <ul>
       <li>Two sightings <strong>within ~50m and a few hours</strong> of each other are probably the <em>same</em> dog — a free hard-positive pair across changes in light, pose, and time of day.</li>
       <li>Sightings far apart <em>and</em> visually dissimilar are probably <em>different</em> dogs — a negative pair.</li>
     </ul>
-    <p>These are noisy but abundant, and they directly attack cold start: enough signal to fine-tune the embedding before humans are in the loop, with feeder confirmations then supervising on top.</p>
+    <p>These are noisy but abundant, and they directly attack cold start: enough signal to fine-tune the embedding before humans are in the loop, with human confirmations then supervising on top.</p>
   </section>
 
   <section>
@@ -358,8 +358,8 @@ LIMIT 10;</code></pre>
       <li><strong>Intake</strong> — a photo arrives over WhatsApp with location and timestamp; the image goes to object storage, a <code>sighting</code> row is created — tagged with species (dog, cat, or the occasional other) from the first photo — and an embedding job is queued.</li>
       <li><strong>Embed</strong> — a background worker computes the appearance embedding (async, CPU is fine at pilot volume — no GPU on day one).</li>
       <li><strong>Retrieve</strong> — the geo-and-time prefilter plus vector ranking finds candidate individuals.</li>
-      <li><strong>Route</strong> — the threshold decision auto-links, proposes to a feeder, or opens a new slot.</li>
-      <li><strong>Confirm</strong> — a feeder's verdict links the sighting and becomes a training label.</li>
+      <li><strong>Route</strong> — the threshold decision auto-links, proposes it to a neighbour, or opens a new slot.</li>
+      <li><strong>Confirm</strong> — a neighbour's verdict links the sighting and becomes a training label.</li>
       <li><strong>Estimate</strong> — a separate job consumes the resight signal to produce population estimates with intervals; a public map renders aggregate density only.</li>
     </ol>
     <p>Everything resists premature scale — no microservices, no GPU, no separate search cluster — until the first experiment tells us how much of the work appearance can actually carry, and how much load the geographic prior must bear.</p>
@@ -383,6 +383,7 @@ LIMIT 10;</code></pre>
       <a href="index.html">Home</a>
       <a href="problem.html">Why</a>
       <a href="technical.html" aria-current="page">How</a>
+      <a href="join.html">Join Us</a>
     </nav>
     <p class="wordmark"><a href="https://instagram.com/nammaindies">Instagram</a> · <a href="https://x.com/nammaindies">X</a> · nammaindies.org</p>
   </footer>

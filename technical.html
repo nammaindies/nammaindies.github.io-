@@ -196,7 +196,7 @@
 
   <section>
     <h2>Two consumers, one pipeline, two thresholds</h2>
-    <p>The same stream of photos feeds two very different products, and they tolerate error very differently.</p>
+    <p>The same stream of photos feeds two different products, and they tolerate error very differently.</p>
     <ul>
       <li><strong>The population layer</strong> asks <em>how many dogs are there?</em> It runs on loose, aggregate match signal — a mark-and-resight estimate with honest confidence intervals. Individual mistakes wash out on average.</li>
       <li><strong>The individual layer</strong> asks <em>is this Kaju?</em> It needs a high-confidence match, ideally confirmed by a human — a feeder or a clinic — because a single wrong link corrupts a dog's whole history.</li>
@@ -216,7 +216,7 @@
 
   <section>
     <h2>The design response: re-ID as fusion</h2>
-    <p>The core move is to stop treating this as pure appearance matching. Dogs are territorial and home ranges are small — so a spatiotemporal prior collapses the candidate set from the whole city down to roughly ten nearby individuals <em>before</em> appearance is ever scored. This attacks the base-rate problem directly, and it means a weak appearance signal only has to separate ten dogs, not ten thousand.</p>
+    <p>So the design doesn't lean on appearance alone. Dogs are territorial and their home ranges are small, so a geo and time prior collapses the candidate set from the whole city down to maybe ten nearby dogs before appearance is scored at all. That goes straight at the base-rate problem, and it means a weak appearance signal only has to tell ten dogs apart, not ten thousand.</p>
     <p>In practice the whole retrieval is close to a single query — a geographic and temporal prefilter, then a vector ranking on a learned appearance embedding:</p>
     <pre><code>SELECT s.individual_id, i.name,
        s.embedding &lt;=&gt; :query AS visual_distance
@@ -227,7 +227,7 @@ WHERE ST_DWithin(s.geog, :location, 300)          <span class="comment">-- geo p
   AND s.individual_id IS NOT NULL
 ORDER BY visual_distance
 LIMIT 10;</code></pre>
-    <p>The embeddings come from an animal re-identification foundation model (MegaDescriptor and/or DINOv2), with room to move to calibrated global-plus-local fusion later. The prior does double duty — it narrows the search, and, as the next section shows, it also manufactures training data for free.</p>
+    <p>The embeddings come from an animal re-identification foundation model (MegaDescriptor and/or DINOv2), with room to move to calibrated global-plus-local fusion later. And the same prior that narrows the search also hands us training pairs for free.</p>
   </section>
 
   <section>
@@ -238,7 +238,7 @@ LIMIT 10;</code></pre>
       <li><strong>Middling / uncertain</strong> → mark it <em>proposed</em> and route it to a feeder whose home area covers the sighting. Geography chooses the right expert automatically — the person most likely to actually know this dog.</li>
       <li><strong>No candidate</strong> → open a new individual slot (or leave it unmatched; the population layer still counts it either way).</li>
     </ul>
-    <p>The confirmation step is the quiet magic. When a feeder says "that's Kaju," that act is <em>recognition-as-love</em> and <em>recognition-as-label</em> at the same time — the same event in the data model. Every human confirmation is also a labelled training pair that improves the embedding on the next round. The people caring for the dogs are, without extra effort, teaching the model to see.</p>
+    <p>When a feeder says "that's Kaju," that's <em>recognition-as-love</em> and <em>recognition-as-label</em> at once — the same event in the data model. Every confirmation is also a labelled training pair that sharpens the embedding on the next round. The people who care for the dogs end up teaching the model to see, without doing anything they weren't already doing.</p>
   </section>
 
   <section>

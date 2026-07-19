@@ -1,0 +1,8 @@
+name = "nammaindies-feedback"
+main = "src/index.js"
+compatibility_date = "2026-07-19"
+
+# Safe to commit. Secrets are set separately (see README) and never live here.
+[vars]
+GITHUB_REPO = "nammaindies/nammaindies.github.io-"
+ALLOWED_ORIGIN = "https://nammaindies.org"

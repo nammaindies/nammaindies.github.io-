@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The App — Namma Indies</title>
+<meta name="description" content="IndieDex — the field tool for the census. Snap a street dog, drop a pin, build the map. In private testing now.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Namma Indies">
+<meta property="og:title" content="The App — Namma Indies">
+<meta property="og:description" content="IndieDex — the field tool for the census. Snap a street dog, drop a pin, build the map. In private testing now.">
+<meta property="og:url" content="https://nammaindies.org/app.html">
+<meta property="og:image" content="https://nammaindies.org/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The App — Namma Indies">
+<meta name="twitter:description" content="IndieDex — the field tool for the census. Snap a street dog, drop a pin, build the map. In private testing now.">
+<meta name="twitter:image" content="https://nammaindies.org/og-image.png">
+<style>
+  :root {
+    --ink: #2b2620;
+    --paper: #faf7f2;
+    --muted: #6f6659;
+    --rule: #e4ddd0;
+    --accent: #a5502e;
+    --code-bg: #f0ebe1;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 3rem 0 1rem;
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 2rem 0 0.5rem;
+  }
+
+  p {
+    font-size: 1.08rem;
+    margin: 0 0 1.3rem;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+
+  a:hover, a:focus { opacity: 0.75; }
+
+  em { font-style: italic; }
+
+  .lede {
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+
+  .steps {
+    padding-left: 1.2rem;
+    margin: 0 0 1.3rem;
+  }
+
+  .steps li {
+    font-size: 1.08rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .steps li:last-child { margin-bottom: 0; }
+
+  .note {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .callout {
+    margin: 1.5rem 0;
+    padding: 1.1rem 1.3rem;
+    background: var(--code-bg);
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  .callout p { margin-bottom: 0.6rem; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* --- feedback box --- */
+  .feedback {
+    margin-top: 1rem;
+    padding: 1.5rem;
+    background: var(--code-bg);
+    border-radius: 0.6rem;
+  }
+
+  .feedback label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .feedback textarea,
+  .feedback input[type="email"] {
+    width: 100%;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 0.4rem;
+    padding: 0.7rem 0.8rem;
+    margin-bottom: 1rem;
+    resize: vertical;
+  }
+
+  .feedback textarea:focus,
+  .feedback input[type="email"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .feedback textarea { min-height: 6.5rem; }
+
+  /* honeypot — hidden from humans, catnip for bots */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .submit {
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--paper);
+    background: var(--accent);
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.65rem 1.4rem;
+    cursor: pointer;
+  }
+
+  .submit:hover, .submit:focus { opacity: 0.85; }
+  .submit:disabled { opacity: 0.5; cursor: default; }
+
+  .form-status {
+    margin: 0.9rem 0 0;
+    font-size: 0.98rem;
+    min-height: 1.2rem;
+  }
+
+  .form-status.ok { color: var(--accent); }
+  .form-status.err { color: #b23b2e; }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .pagenav a {
+    color: var(--muted);
+    border-bottom: none;
+    margin-right: 1.1rem;
+  }
+
+  .pagenav a:hover { color: var(--accent); opacity: 1; }
+
+  .pagenav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .wordmark { margin: 1rem 0 0; }
+  .wordmark a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .wordmark a:hover { color: var(--accent); border-color: currentColor; }
+
+  .brand { margin-bottom: 1.1rem; }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: none;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .logo:hover, .logo:focus { opacity: 1; }
+
+  .logo-mark {
+    width: 1.5em;
+    height: 1.5em;
+    overflow: visible;
+    flex: none;
+  }
+
+  .logo-mark path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .logo:hover .logo-mark,
+  .logo:focus .logo-mark {
+    animation: wag 0.9s ease-in-out;
+    transform-origin: 60% 75%;
+  }
+
+  @keyframes wag {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-9deg); }
+    60% { transform: rotate(7deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo:hover .logo-mark,
+    .logo:focus .logo-mark { animation: none; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #ece6db;
+      --paper: #1c1913;
+      --muted: #a89d8a;
+      --rule: #3a3428;
+      --accent: #e0895a;
+      --code-bg: #26221a;
+    }
+    .form-status.err { color: #e0715a; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="brand"><a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 25 C9 16 13 12 19 12 C24 12 27 15 27 19.5 C27 23.5 23.5 25.5 20.5 24 C18.3 22.9 18 20 20 18.7"/></svg><span>Namma Indies</span></a></p>
+    <h1>The App</h1>
+    <p class="tagline">snap a dog, and it's on the map</p>
+  </header>
+
+  <section>
+    <p class="lede">Someone on your street already knows the dogs — which one's new, which one limps, which one waits by the tea stall. The app is where that knowledge finally has somewhere to go. We call it the IndieDex.</p>
+
+    <p>It's a phone app, built for walking around. You photograph a dog, and it quietly notes where and when on its own. Over time that becomes a map of the dogs on your street, in your hand — the raw material the whole census is built from. One sighting at a time.</p>
+  </section>
+
+  <section>
+    <h2>What it does today</h2>
+
+    <h3>Capture a dog</h3>
+    <p>Tap the camera, take a photo. The app reads your location and the time by itself, so a sighting is really one tap. If you know more, you can add it — a quick note ("friendly", "limping", "near the tea stall"), and a few taps for sex, whether an ear's been notched (a sign it's been sterilised), and rough condition. All optional. No signal? It saves the sighting and syncs it when you're back online.</p>
+
+    <h3>Your IndieDex</h3>
+    <p>Everything you log shows up as pins on a map and a scrollable gallery of photos. Tap any one to see when and where you found it. Right now you see your own captures — a shared, neighbourhood-wide view is a later decision, not something we've rushed.</p>
+
+    <h3>It lives on your phone</h3>
+    <p>Add it to your home screen and it behaves like any other app — full screen, its own icon, no app store needed.</p>
+  </section>
+
+  <section>
+    <h2>What's coming</h2>
+    <p>This is the capture end, on purpose. The harder part — recognising the <em>same</em> dog across photos, so a sighting becomes a known individual with a name and a history — comes next, and the app is already built to hold it. After that: names and health records, and eventually a shared map a whole neighbourhood can build together. <a href="technical.html">How it works →</a> has the technical side.</p>
+  </section>
+
+  <section>
+    <h2>How to get in</h2>
+    <div class="callout">
+      <p>It's early. Right now the app is in a small private test in Bangalore, so there's no public link yet.</p>
+      <p>Getting in is simple when we open it up: we send you a link, you open it on your phone, and you're in — no password to remember, nothing to sign up for.</p>
+    </div>
+    <p>Want to be one of the first to map your street? <a href="join.html">Come say hello</a> — tell us where you are and we'll get you set up.</p>
+  </section>
+
+  <section>
+    <h2>Got an idea?</h2>
+    <p>If you've used it and something's missing — or you just thought of something that'd help — tell us here. It goes straight to the people building it.</p>
+
+    <form class="feedback" id="feedback-form" method="post" action="https://nammaindies-feedback.nammaindies.workers.dev">
+      <label for="fb-message">Your idea, or what's not working</label>
+      <textarea id="fb-message" name="message" required placeholder="e.g. I wish I could add a dog without a photo, or search my sightings by area…"></textarea>
+
+      <label for="fb-contact">Email, if you'd like a reply (optional)</label>
+      <input type="email" id="fb-contact" name="contact" placeholder="you@example.com" autocomplete="email">
+
+      <!-- honeypot: humans never see this; bots fill it and get dropped -->
+      <div class="hp" aria-hidden="true">
+        <label for="fb-website">Leave this field empty</label>
+        <input type="text" id="fb-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Cloudflare Turnstile mounts here (invisible/managed) once the site key is set -->
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAD5J8MLg3ewIknW9" data-size="flexible"></div>
+
+      <button type="submit" class="submit">Send it over</button>
+      <p class="form-status" id="fb-status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <footer>
+    <nav class="pagenav">
+      <a href="https://github.com/nammaindies">GitHub</a>
+      <a href="index.html">Home</a>
+      <a href="problem.html">Why</a>
+      <a href="technical.html">How</a>
+      <a href="app.html" aria-current="page">App</a>
+      <a href="join.html">Join Us</a>
+    </nav>
+    <p class="wordmark"><a href="https://instagram.com/nammaindies">Instagram</a> · <a href="https://x.com/nammaindies">X</a> · nammaindies.org</p>
+  </footer>
+</main>
+
+<!--
+  Feedback box is live: posts to the nammaindies-feedback Cloudflare Worker,
+  which verifies Turnstile and files a GitHub issue (label: feedback). The rest
+  of the site stays JS-free; this one page carries a little script because a
+  live form is inherently interactive. It still degrades: with JS off, the
+  browser does a plain native POST to the Worker, which returns a thank-you page.
+  See feedback-worker/README.md for the moving parts.
+-->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  (function () {
+    var form = document.getElementById('feedback-form');
+    var status = document.getElementById('fb-status');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('.submit');
+      var data = new FormData(form);
+      status.className = 'form-status';
+      status.textContent = 'Sending…';
+      btn.disabled = true;
+
+      fetch(form.action, { method: 'POST', body: data })
+        .then(function (r) { if (!r.ok) throw new Error(); return r; })
+        .then(function () {
+          form.reset();
+          if (window.turnstile) window.turnstile.reset();
+          status.className = 'form-status ok';
+          status.textContent = 'Got it — thank you. 🐾';
+          btn.disabled = false;
+        })
+        .catch(function () {
+          status.className = 'form-status err';
+          status.textContent = 'Something went wrong. Mind trying again?';
+          btn.disabled = false;
+        });
+    });
+  })();
+</script>
+</body>
+</html>

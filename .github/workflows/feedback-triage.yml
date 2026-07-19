@@ -1,0 +1,130 @@
+name: Triage feedback
+
+# When the feedback Worker files an issue (label: feedback), Claude reads it,
+# sorts it into a theme, checks whether it duplicates an existing feedback
+# issue, and leaves a short triage note for the maintainers. Runs on the issue
+# itself — the submit path (Worker) stays dumb; the judgement lives here, where
+# it's auditable and re-runnable.
+#
+# Needs one repo secret: ANTHROPIC_API_KEY.  (The built-in GITHUB_TOKEN handles
+# labelling + commenting — no extra token.)
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  triage:
+    # Feedback-box issues only. On `labeled`, run solely when the `feedback`
+    # label itself was just added — so the Action adding its own theme labels
+    # can't re-trigger this workflow.
+    if: >
+      contains(github.event.issue.labels.*.name, 'feedback') &&
+      (github.event.action == 'opened' || github.event.label.name == 'feedback')
+    runs-on: ubuntu-latest
+    env:
+      MODEL: claude-haiku-4-5-20251001
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_TITLE: ${{ github.event.issue.title }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+    steps:
+      - name: Triage with Claude
+        run: |
+          set -uo pipefail
+
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "ANTHROPIC_API_KEY not set — skipping triage."
+            exit 0
+          fi
+
+          # Existing open feedback issues (so Claude can spot duplicates),
+          # excluding this one.
+          EXISTING=$(gh issue list --repo "$REPO" --label feedback --state open \
+            --limit 50 --json number,title \
+            | jq --argjson self "$ISSUE_NUMBER" '[.[] | select(.number != $self)]')
+
+          INSTRUCTIONS='You triage incoming feedback for Namma Indies, a phone app for mapping India'"'"'s street dogs (photograph a dog -> auto GPS+time -> it lands on a map). Read the new feedback issue and respond with ONLY a JSON object, no prose, with these keys:
+          - "theme": exactly one of ["capture","map","offline","access","privacy","idea"] — capture=the camera/photo/attributes flow; map=the IndieDex map, gallery, browsing; offline=offline capture and syncing; access=login, invites, accounts; privacy=data, consent, deletion; idea=anything else or a general feature request.
+          - "summary": a neutral restatement in 12 words or fewer.
+          - "duplicate_of": the issue number from EXISTING that this clearly duplicates, or null. Only when it is genuinely the same request.
+          - "note": one or two plain sentences for maintainers — what is being asked, and any quick practical read. No hype, no filler.'
+
+          USER_MSG=$(jq -n \
+            --arg instr "$INSTRUCTIONS" \
+            --arg title "$ISSUE_TITLE" \
+            --arg body "$ISSUE_BODY" \
+            --argjson existing "$EXISTING" \
+            '$instr + "\n\nNEW ISSUE\nTitle: " + $title + "\nBody:\n" + $body + "\n\nEXISTING OPEN FEEDBACK ISSUES (for duplicate check):\n" + ($existing | tostring)')
+
+          PAYLOAD=$(jq -n --arg model "$MODEL" --arg user "$USER_MSG" '{
+            model: $model,
+            max_tokens: 700,
+            messages: [
+              { role: "user", content: $user },
+              { role: "assistant", content: "{" }
+            ]
+          }')
+
+          RESP=$(curl -sS https://api.anthropic.com/v1/messages \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -H "content-type: application/json" \
+            -d "$PAYLOAD")
+
+          TEXT=$(printf '%s' "$RESP" | jq -r '.content[0].text // empty')
+          if [ -z "$TEXT" ]; then
+            echo "No text from model. Full response:"
+            printf '%s\n' "$RESP"
+            exit 1
+          fi
+
+          # We prefilled "{", so prepend it back and parse.
+          TRIAGE=$(printf '{%s' "$TEXT" | jq -c '.' 2>/dev/null)
+          if [ -z "$TRIAGE" ]; then
+            echo "Could not parse model output as JSON:"
+            printf '{%s\n' "$TEXT"
+            exit 1
+          fi
+
+          THEME=$(printf '%s' "$TRIAGE" | jq -r '.theme // "idea"')
+          SUMMARY=$(printf '%s' "$TRIAGE" | jq -r '.summary // ""')
+          DUP=$(printf '%s' "$TRIAGE" | jq -r '.duplicate_of // empty')
+          NOTE=$(printf '%s' "$TRIAGE" | jq -r '.note // ""')
+
+          case "$THEME" in
+            capture|map|offline|access|privacy|idea) ;;
+            *) THEME=idea ;;
+          esac
+
+          # Ensure the theme label exists, then apply it.
+          gh label create "theme:$THEME" --repo "$REPO" --color C2A878 \
+            --description "Feedback theme" 2>/dev/null || true
+          gh issue edit "$ISSUE_NUMBER" --repo "$REPO" --add-label "theme:$THEME" || true
+
+          # Build the triage comment.
+          {
+            echo "**Triage** — theme \`$THEME\`"
+            [ -n "$SUMMARY" ] && echo && echo "> $SUMMARY"
+            [ -n "$NOTE" ] && echo && echo "$NOTE"
+            if [ -n "$DUP" ] && [ "$DUP" != "null" ]; then
+              echo
+              echo "Looks like a possible duplicate of #$DUP."
+            fi
+            echo
+            echo "<sub>Auto-triaged by Claude. A maintainer still decides.</sub>"
+          } > comment.md
+
+          if [ -n "$DUP" ] && [ "$DUP" != "null" ]; then
+            gh label create "possible-duplicate" --repo "$REPO" --color EDD9A3 \
+              --description "Flagged as a likely duplicate" 2>/dev/null || true
+            gh issue edit "$ISSUE_NUMBER" --repo "$REPO" --add-label "possible-duplicate" || true
+          fi
+
+          gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body-file comment.md

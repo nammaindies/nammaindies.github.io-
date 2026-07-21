@@ -129,6 +129,43 @@
   .callout p { margin-bottom: 0.6rem; }
   .callout p:last-child { margin-bottom: 0; }
 
+  /* --- app screenshots + pixel motif --- */
+  .app-motif {
+    display: block;
+    width: 3.25rem;
+    height: auto;
+    margin: 2.75rem auto 0.4rem;
+    image-rendering: pixelated;
+  }
+
+  .shots {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .shots img {
+    width: 30%;
+    min-width: 8.5rem;
+    max-width: 11.5rem;
+    height: auto;
+    border-radius: 1rem;
+    border: 1px solid var(--rule);
+    box-shadow: 0 0.5rem 1.6rem rgba(43, 38, 32, 0.16);
+  }
+
+  .shots figcaption {
+    flex-basis: 100%;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+
   /* --- feedback box --- */
   .feedback {
     margin-top: 1rem;
@@ -296,6 +333,16 @@
     <p class="lede">Someone on your street already knows the dogs on it — by sight, by habit, by name. The app is where that knowledge finally has somewhere to go. We call it the IndieDex.</p>
 
     <p>It's a phone app, built for walking around. You photograph a dog, and it quietly notes where and when on its own. Over time that becomes a map of the dogs on your street, in your hand — the raw material the whole census is built from. One sighting at a time.</p>
+  </section>
+
+  <section>
+    <img class="app-motif" src="pixel-indie.svg" alt="" aria-hidden="true">
+    <figure class="shots">
+      <img src="screens/app-spot.png" alt="IndieDex: spotting an indie through the camera viewfinder" loading="lazy">
+      <img src="screens/app-map.png" alt="IndieDex: sightings pinned on a map of Bangalore" loading="lazy">
+      <img src="screens/app-journal.png" alt="IndieDex: a field journal of logged indies" loading="lazy">
+      <figcaption>The IndieDex, in private testing — spot an indie, watch it land on the map, keep it in your field journal.</figcaption>
+    </figure>
   </section>
 
   <section>
